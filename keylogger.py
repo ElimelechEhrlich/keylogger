@@ -58,7 +58,6 @@ def start_listening():
 def file_organization():
     if os.path.exists(Last_listen_filename):
         os.remove(Last_listen_filename)
-
     os.rename(Current_listening_name, Last_listen_filename)
 
 def main():
