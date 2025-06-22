@@ -66,3 +66,5 @@ def main():
     start_listening()
     file_organization()
 
+if __name__ == '__main__':
+    main()
